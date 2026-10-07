@@ -1,0 +1,111 @@
+Запуск всех тестов акторов Thespian (main2)...
+
+============================================================
+ТЕСТ 1: SimplestActor (шаги 1-4)
+============================================================
+Создан новый актор
+Актор с адресом ActorAddr-/A~a получил Первое сообщение от ActorAddr-System:ExternalRequester
+Актор с адресом ActorAddr-/A~a ранее получал сообщение Первое сообщение
+Актор с адресом ActorAddr-/A~a получил 132 от ActorAddr-System:ExternalRequester
+Актор с адресом ActorAddr-/A~a ранее получал сообщение Первое сообщение
+Актор с адресом ActorAddr-/A~a ранее получал сообщение 132
+Актор с адресом ActorAddr-/A~a получил [1, 3, 5] от ActorAddr-System:ExternalRequester
+Актор с адресом ActorAddr-/A~a ранее получал сообщение Первое сообщение
+Актор с адресом ActorAddr-/A~a ранее получал сообщение 132
+Актор с адресом ActorAddr-/A~a ранее получал сообщение [1, 3, 5]
+Актор с адресом ActorAddr-/A~a получил {'key': 'value'} от ActorAddr-System:ExternalRequester
+Актор с адресом ActorAddr-/A~a ранее получал сообщение Первое сообщение
+Актор с адресом ActorAddr-/A~a ранее получал сообщение 132
+Актор с адресом ActorAddr-/A~a ранее получал сообщение [1, 3, 5]
+Актор с адресом ActorAddr-/A~a ранее получал сообщение {'key': 'value'}
+Актор с адресом ActorAddr-/A~a получил CREATE_ACTOR от ActorAddr-System:ExternalRequester
+Актор с адресом ActorAddr-/A~a ранее получал сообщение Первое сообщение
+Актор с адресом ActorAddr-/A~a ранее получал сообщение 132
+Актор с адресом ActorAddr-/A~a ранее получал сообщение [1, 3, 5]
+Актор с адресом ActorAddr-/A~a ранее получал сообщение {'key': 'value'}
+Актор с адресом ActorAddr-/A~a ранее получал сообщение CREATE_ACTOR
+Создан новый актор
+Создали нового актора, его адрес - ActorAddr-/A~a~a
+Актор с адресом ActorAddr-/A~a получил RETRANSLATED MESSAGE от ActorAddr-System:ExternalRequester
+Актор с адресом ActorAddr-/A~a ранее получал сообщение Первое сообщение
+Актор с адресом ActorAddr-/A~a ранее получал сообщение 132
+Актор с адресом ActorAddr-/A~a ранее получал сообщение [1, 3, 5]
+Актор с адресом ActorAddr-/A~a ранее получал сообщение {'key': 'value'}
+Актор с адресом ActorAddr-/A~a ранее получал сообщение CREATE_ACTOR
+Актор с адресом ActorAddr-/A~a ранее получал сообщение RETRANSLATED MESSAGE
+Ретранслируем сообщение дочернему актору с адресом ActorAddr-/A~a~a
+Актор с адресом ActorAddr-/A~a~a получил RETRANSLATED MESSAGE от ActorAddr-/A~a
+Актор с адресом ActorAddr-/A~a~a ранее получал сообщение RETRANSLATED MESSAGE
+
+============================================================
+ТЕСТ 2: Сумма чисел (NumberActor + CalculatorActor)
+============================================================
+Актор числа с адресом ActorAddr-/A~b получил {'init_value': 1, 'calculator_address': <thespian.actors.ActorAddress object at 0x00000285980DDC50>} от ActorAddr-System:ExternalRequester
+Актор-калькулятор с адресом ActorAddr-/A~a получил 1 от ActorAddr-/A~b, итоговая сумма: 1
+Актор числа с адресом ActorAddr-/A~c получил {'init_value': 2, 'calculator_address': <thespian.actors.ActorAddress object at 0x00000285980DDC50>} от ActorAddr-System:ExternalRequester
+Актор-калькулятор с адресом ActorAddr-/A~a получил 2 от ActorAddr-/A~c, итоговая сумма: 3
+Актор числа с адресом ActorAddr-/A~d получил {'init_value': 3, 'calculator_address': <thespian.actors.ActorAddress object at 0x00000285980DDC50>} от ActorAddr-System:ExternalRequester
+Актор-калькулятор с адресом ActorAddr-/A~a получил 3 от ActorAddr-/A~d, итоговая сумма: 6
+
+============================================================
+ТЕСТ 3: Калькулятор (+, -, *, /)
+============================================================
+
+--- Тест 1: 2 * 5 ---
+[NumberActor ActorAddr-/A~b] получил значение 2, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 2}
+[NumberActor ActorAddr-/A~c] получил значение 5, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 5}
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'operator': '*'}
+Выражение: 2 * 5 = 10
+
+--- Тест 2: 10 + 7 ---
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'operator': '+'}
+[NumberActor ActorAddr-/A~b] получил значение 10, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 10}
+[NumberActor ActorAddr-/A~c] получил значение 7, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 7}
+Выражение: 10 + 7 = 17
+
+--- Тест 3: 20 - 8 ---
+[NumberActor ActorAddr-/A~b] получил значение 20, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 20}
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'operator': '-'}
+[NumberActor ActorAddr-/A~c] получил значение 8, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 8}
+Выражение: 20 - 8 = 12
+
+--- Тест 4: 15 / 3 ---
+[NumberActor ActorAddr-/A~b] получил значение 15, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 15}
+[NumberActor ActorAddr-/A~c] получил значение 3, пересылаю в калькулятор ActorAddr-/A~a
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'value': 3}
+[CalculatorActor ActorAddr-/A~a] получил сообщение: {'operator': '/'}
+Выражение: 15 / 3 = 5.0
+
+============================================================
+ТЕСТ 4: TimerActor (ask)
+============================================================
+Создан новый таймер актор
+Создан новый таймер актор
+Таймер актор ActorAddr-/A~a получил "привет 1", счётчик = 1
+   Ответ от timerAddress1: 1
+Таймер актор ActorAddr-/A~a получил "привет 2", счётчик = 2
+   Ответ от timerAddress1: 2
+Таймер актор ActorAddr-/A~a получил "привет 3", счётчик = 3
+   Ответ от timerAddress1: 3
+Таймер актор ActorAddr-/A~b получил "здравствуй 1", счётчик = 1
+   Ответ от timerAddress2: 1
+Таймер актор ActorAddr-/A~b получил "здравствуй 2", счётчик = 2
+   Ответ от timerAddress2: 2
+Таймер актор ActorAddr-/A~a получил "привет 4", счётчик = 4
+   Ответ от timerAddress1 (привет 4): 4
+
+============================================================
+ТЕСТ 5: ChainActor (цепочка из 5 акторов)
+============================================================
+Результат: Hello, переходов: 5, время: 0.15 мс
+
+============================================================
+Все тесты завершены!
+============================================================
