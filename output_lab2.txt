@@ -1,0 +1,85 @@
+ЛР-2: каркас МАС (типизированные сообщения, подписки)...
+
+============================================================
+ДЕМО 1 (база): калькулятор на каркасе, 1 + 3 = 4
+============================================================
+[Агент числа ActorAddr-/A~b] Инициализация, задержка: 0.18 мс
+Актор числа с адресом ActorAddr-/A~b получил Message(msg_type=<MessageType.INITIALIZATION: 'Инициализация'>, msg_body={'init_value': 1, 'calculator_address': <thespian.actors.ActorAddress object at 0x000001CDC80F49D0>}, created_at=1791387703.7132454) от ActorAddr-System:ExternalRequester
+[Агент-калькулятор ActorAddr-/A~a] Приветствие, задержка: 0.06 мс
+Актор-калькулятор с адресом ActorAddr-/A~a получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=1, created_at=1791387703.7136567) от ActorAddr-/A~b, итоговая сумма: 1
+[Агент числа ActorAddr-/A~c] Инициализация, задержка: 0.07 мс
+Актор числа с адресом ActorAddr-/A~c получил Message(msg_type=<MessageType.INITIALIZATION: 'Инициализация'>, msg_body={'init_value': 3, 'calculator_address': <thespian.actors.ActorAddress object at 0x000001CDC80F49D0>}, created_at=1791387704.2145693) от ActorAddr-System:ExternalRequester
+[Агент-калькулятор ActorAddr-/A~a] Приветствие, задержка: 0.02 мс
+Актор-калькулятор с адресом ActorAddr-/A~a получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=3, created_at=1791387704.214742) от ActorAddr-/A~c, итоговая сумма: 4
+
+============================================================
+ДЕМО 2 (СР-1): SET_OPERATION + сообщение без подписки
+============================================================
+[Агент числа ActorAddr-/A~e] Инициализация, задержка: 0.13 мс
+Актор числа с адресом ActorAddr-/A~e получил Message(msg_type=<MessageType.INITIALIZATION: 'Инициализация'>, msg_body={'init_value': 10, 'calculator_address': <thespian.actors.ActorAddress object at 0x000001CDC7B3CC00>}, created_at=1791387706.5168755) от ActorAddr-System:ExternalRequester
+[Агент-калькулятор ActorAddr-/A~d] Приветствие, задержка: 0.04 мс
+Актор-калькулятор с адресом ActorAddr-/A~d получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=10, created_at=1791387706.5172539) от ActorAddr-/A~e, итоговая сумма: 10
+[Агент числа ActorAddr-/A~f] Инициализация, задержка: 0.03 мс
+Актор числа с адресом ActorAddr-/A~f получил Message(msg_type=<MessageType.INITIALIZATION: 'Инициализация'>, msg_body={'init_value': 7, 'calculator_address': <thespian.actors.ActorAddress object at 0x000001CDC7B3CC00>}, created_at=1791387706.5174034) от ActorAddr-System:ExternalRequester
+[Агент-калькулятор ActorAddr-/A~d] Приветствие, задержка: 0.02 мс
+Актор-калькулятор с адресом ActorAddr-/A~d получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=7, created_at=1791387706.5175266) от ActorAddr-/A~f, итоговая сумма: 17
+[Агент-калькулятор ActorAddr-/A~d] Установка операции, задержка: 0.08 мс
+[Калькулятор] Установлена операция: +
+Выражение: 10 + 7 = 17
+--- Шлём калькулятору INITIALIZATION (подписки нет) ---
+[Агент-калькулятор ActorAddr-/A~d] Инициализация, задержка: 0.07 мс
+2026-10-07 19:41:48,318 WARNING =>  Агент-калькулятор: отсутствует подписка на сообщение: MessageType.INITIALIZATION  [agent_base.py:60]
+[Агент-калькулятор] Нет подписки на MessageType.INITIALIZATION, продолжаю работать.
+
+============================================================
+ДЕМО 3 (СР-3): unsubscribe + отказ после 10 сообщений
+============================================================
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.04 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 1 (1/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.01 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=1, created_at=1791387709.9211326) от ActorAddr-/A~h, итоговая сумма: 1
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.08 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 2 (2/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.02 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=2, created_at=1791387710.1717558) от ActorAddr-/A~h, итоговая сумма: 3
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.12 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 3 (3/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.03 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=3, created_at=1791387710.422923) от ActorAddr-/A~h, итоговая сумма: 6
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.06 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 4 (4/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.02 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=4, created_at=1791387710.6741352) от ActorAddr-/A~h, итоговая сумма: 10
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.06 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 5 (5/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.01 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=5, created_at=1791387710.9250958) от ActorAddr-/A~h, итоговая сумма: 15
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.09 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 6 (6/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.03 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=6, created_at=1791387711.1759038) от ActorAddr-/A~h, итоговая сумма: 21
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.06 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 7 (7/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.01 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=7, created_at=1791387711.4265664) от ActorAddr-/A~h, итоговая сумма: 28
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.19 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 8 (8/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.05 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=8, created_at=1791387711.6772804) от ActorAddr-/A~h, итоговая сумма: 36
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.10 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 9 (9/10)
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.03 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=9, created_at=1791387711.9279885) от ActorAddr-/A~h, итоговая сумма: 45
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.07 мс
+[Переключаемый агент ActorAddr-/A~h] принял значение 10 (10/10)
+[Переключаемый агент] Достигнут лимит 10: отписался от HELLO_WORLD, дальше — отказы.
+[Агент-калькулятор ActorAddr-/A~g] Приветствие, задержка: 0.10 мс
+Актор-калькулятор с адресом ActorAddr-/A~g получил Message(msg_type=<MessageType.HELLO_WORLD: 'Приветствие'>, msg_body=10, created_at=1791387712.17951) от ActorAddr-/A~h, итоговая сумма: 55
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.11 мс
+[Переключаемый агент] Отказ: лимит 10 исчерпан, сообщение 11 отклонено.
+[Переключаемый агент ActorAddr-/A~h] Инициализация, задержка: 0.07 мс
+[Переключаемый агент] Отказ: лимит 10 исчерпан, сообщение 12 отклонено.
+
+============================================================
+Все демо завершены!
+============================================================
