@@ -19,13 +19,10 @@ class AgentBase(ABC, Actor):
     """Базовая реализация агента: подписки + диспетчеризация."""
 
     def __init__(self):
-        # NB: у Thespian Actor нет __init__ с обязательными аргументами,
-        # super().__init__() не вызываем намеренно (как в методичке).
         self.name = 'Базовый агент'
         self.handlers: Dict[MessageType, Callable[[Message, ActorAddress], None]] = {}
         self.subscribe(MessageType.HELLO_WORLD, self.handle_hello_world)
 
-    # --- Подписка (шаг 3) + отписка (СР-3) ---
     def subscribe(self, msg_type: MessageType, handler: Callable[[Message, ActorAddress], None]):
         """Подписка на события определённого типа."""
         if msg_type in self.handlers:
@@ -39,7 +36,6 @@ class AgentBase(ABC, Actor):
         else:
             logging.warning('%s: нет подписки для отписки: %s', self.name, msg_type)
 
-    # --- Диспетчеризация (шаг 4) ---
     def receiveMessage(self, msg, sender):  # noqa: N802 (имя требует Thespian)
         """Только поиск обработчика по типу + перехват исключений."""
         logging.debug('%s получил сообщение: %s', self.name, msg)
@@ -48,7 +44,6 @@ class AgentBase(ABC, Actor):
             logging.warning('%s: нетипизированное сообщение %r игнорирую', self.name, msg)
             return
 
-        # СР-2: задержка между отправкой и обработкой
         try:
             delay_ms = (time.time() - float(msg.created_at)) * 1000.0
         except (TypeError, ValueError):
@@ -62,7 +57,7 @@ class AgentBase(ABC, Actor):
             return
         try:
             handler(msg, sender)
-        except Exception as ex:  # падение обработчика не должно убивать агента
+        except Exception as ex:
             traceback.print_exc()
             logging.error(ex)
 

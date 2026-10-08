@@ -31,7 +31,6 @@ class CalculatorAgent(AgentBase):
         self.operation = None
         self.subscribe(MessageType.SET_OPERATION, self.handle_set_operation)
 
-    # Переопределённый обработчик базового класса (способ №2)
     def handle_hello_world(self, message: Message, sender: ActorAddress):
         new_value = message.msg_body
         self.values.append(new_value)
