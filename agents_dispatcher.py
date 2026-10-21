@@ -12,12 +12,12 @@ TYPES_AGENTS = {'ORDER': OrderAgent, 'COURIER': CourierAgent}
 
 
 class AgentsDispatcher:
-    def __init__(self, scene, nearest_count=None):
+    def __init__(self, scene, criteria):
         # Учебная сцена передается по ссылке в одном процессе.
         self.actor_system = ActorSystem('simpleSystemBase', logDefs=False)
         self.reference_book = ReferenceBook()
         self.scene = scene
-        self.nearest_count = nearest_count
+        self.criteria = criteria
         self.message_counts = Counter()
 
     def add_entity(self, entity):

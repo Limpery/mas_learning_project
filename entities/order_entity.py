@@ -19,6 +19,7 @@ class OrderEntity(BaseEntity):
         self.order_type = init_dict_data['Тип заказа']
         self.uri = 'Order' + str(self.number)
         self.assigned_courier = None
+        self.selected_variant = None
 
     def get_type(self):
         return 'ORDER'

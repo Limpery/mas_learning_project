@@ -1,4 +1,4 @@
-"""Сообщения протокола планирования ЛР3."""
+"""Сообщения протокола планирования ЛР4."""
 
 from dataclasses import dataclass
 from enum import Enum

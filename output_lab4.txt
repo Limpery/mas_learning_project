@@ -1,0 +1,60 @@
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Документы: курьер Сидоров С. С. исключен по типу груза Документы
+CourierAgent Иванов И. И. <- ActorAddr-/A~d: Запрос параметров
+CourierAgent Иванов И. И.: варианты [(0.0, 2.0, 20.0), (1.0, 3.0, 20.0), (8.0, 10.0, 20.0)]
+CourierAgent Петров П. П. <- ActorAddr-/A~d: Запрос параметров
+CourierAgent Петров П. П.: варианты [(0.0, 2.61245154965971, 31.349418595916518), (0.3875484503402902, 3.0, 31.349418595916518), (7.38754845034029, 10.0, 31.349418595916518)]
+OrderAgent Документы <- ActorAddr-/A~a: Ответ с параметрами
+OrderAgent Документы <- ActorAddr-/A~b: Ответ с параметрами
+OrderAgent Документы: {'courier': 'Иванов И. И.', 'order': 1, 'time_from': 0.0, 'time_to': 2.0, 'arrival': 1.0, 'pickup': 1.0, 'price': 20.0, 'point_from': (0; 0), 'variant_name': 'asap', 'pickup_deviation': 1.0, 'total_efficiency': 0.9857142857142857, 'start_efficiency': 1, 'finish_efficiency': 1, 'price_efficiency': 1, 'pickup_accuracy_efficiency': 0.8571428571428572}
+OrderAgent Документы: {'courier': 'Иванов И. И.', 'order': 1, 'time_from': 1.0, 'time_to': 3.0, 'arrival': 2.0, 'pickup': 2.0, 'price': 20.0, 'point_from': (0; 0), 'variant_name': 'jit_pickup', 'pickup_deviation': 0.0, 'total_efficiency': 0.975, 'start_efficiency': 0.875, 'finish_efficiency': 0.875, 'price_efficiency': 1, 'pickup_accuracy_efficiency': 1}
+OrderAgent Документы: {'courier': 'Иванов И. И.', 'order': 1, 'time_from': 8.0, 'time_to': 10.0, 'arrival': 9.0, 'pickup': 9.0, 'price': 20.0, 'point_from': (0; 0), 'variant_name': 'jit_delivery', 'pickup_deviation': 7.0, 'total_efficiency': 0.7, 'start_efficiency': 0, 'finish_efficiency': 0, 'price_efficiency': 1, 'pickup_accuracy_efficiency': 0}
+OrderAgent Документы: {'courier': 'Петров П. П.', 'order': 1, 'time_from': 0.0, 'time_to': 2.61245154965971, 'arrival': 1.6124515496597098, 'pickup': 1.6124515496597098, 'price': 31.349418595916518, 'point_from': (10; 0), 'variant_name': 'asap', 'pickup_deviation': 0.3875484503402902, 'total_efficiency': 0.2791523048250746, 'start_efficiency': 0.9234435562925363, 'finish_efficiency': 0.9234435562925363, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 0.9446359356656728}
+OrderAgent Документы: {'courier': 'Петров П. П.', 'order': 1, 'time_from': 0.3875484503402902, 'time_to': 3.0, 'arrival': 2.0, 'pickup': 2.0, 'price': 31.349418595916518, 'point_from': (10; 0), 'variant_name': 'jit_pickup', 'pickup_deviation': 0.0, 'total_efficiency': 0.275, 'start_efficiency': 0.875, 'finish_efficiency': 0.875, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 1}
+OrderAgent Документы: {'courier': 'Петров П. П.', 'order': 1, 'time_from': 7.38754845034029, 'time_to': 10.0, 'arrival': 9.0, 'pickup': 9.0, 'price': 31.349418595916518, 'point_from': (10; 0), 'variant_name': 'jit_delivery', 'pickup_deviation': 7.0, 'total_efficiency': 0.0, 'start_efficiency': 0, 'finish_efficiency': 0, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 0}
+CourierAgent Иванов И. И. <- ActorAddr-/A~d: Запрос планирования
+CourierAgent Иванов И. И.: Принято, заказ 1
+OrderAgent Документы <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+CourierAgent Иванов И. И. <- ActorAddr-/A~e: Запрос параметров
+CourierAgent Иванов И. И.: варианты [(2.0, 3.0, 10.0)]
+CourierAgent Петров П. П. <- ActorAddr-/A~e: Запрос параметров
+CourierAgent Петров П. П.: варианты [(0.0, 2.788854381999832, 33.466252583997985), (6.2111456180001685, 9.0, 33.466252583997985), (12.211145618000169, 15.0, 33.466252583997985)]
+CourierAgent Сидоров С. С. <- ActorAddr-/A~e: Запрос параметров
+CourierAgent Сидоров С. С.: варианты [(0.0, 2.83113883008419, 22.64911064067352), (6.41886116991581, 9.25, 22.64911064067352), (12.168861169915811, 15.0, 22.64911064067352)]
+OrderAgent Посылка <- ActorAddr-/A~a: Ответ с параметрами
+OrderAgent Посылка <- ActorAddr-/A~b: Ответ с параметрами
+OrderAgent Посылка <- ActorAddr-/A~c: Ответ с параметрами
+OrderAgent Посылка: {'courier': 'Иванов И. И.', 'order': 2, 'time_from': 2.0, 'time_to': 3.0, 'arrival': 2.0, 'pickup': 2.0, 'price': 10.0, 'point_from': (6; 8), 'variant_name': 'asap', 'pickup_deviation': 6.0, 'total_efficiency': 0.901423570275621, 'start_efficiency': 0.966272175509097, 'finish_efficiency': 0.9827087789626452, 'price_efficiency': 1, 'pickup_accuracy_efficiency': 0.0652547482844692}
+OrderAgent Посылка: {'courier': 'Петров П. П.', 'order': 2, 'time_from': 0.0, 'time_to': 2.788854381999832, 'arrival': 1.788854381999832, 'pickup': 1.788854381999832, 'price': 33.466252583997985, 'point_from': (10; 0), 'variant_name': 'asap', 'pickup_deviation': 6.2111456180001685, 'total_efficiency': 0.20156343744570526, 'start_efficiency': 0.9832741868136167, 'finish_efficiency': 1, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 0.03236018764343607}
+OrderAgent Посылка: {'courier': 'Петров П. П.', 'order': 2, 'time_from': 6.2111456180001685, 'time_to': 9.0, 'arrival': 8.0, 'pickup': 8.0, 'price': 33.466252583997985, 'point_from': (10; 0), 'variant_name': 'jit_pickup', 'pickup_deviation': 0.0, 'total_efficiency': 0.19744904772358712, 'start_efficiency': 0.4831360877545485, 'finish_efficiency': 0.4913543894813226, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 1}
+OrderAgent Посылка: {'courier': 'Петров П. П.', 'order': 2, 'time_from': 12.211145618000169, 'time_to': 15.0, 'arrival': 14.0, 'pickup': 14.0, 'price': 33.466252583997985, 'point_from': (10; 0), 'variant_name': 'jit_delivery', 'pickup_deviation': 6.0, 'total_efficiency': 0.00652547482844692, 'start_efficiency': 0, 'finish_efficiency': 0, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 0.0652547482844692}
+OrderAgent Посылка: {'courier': 'Сидоров С. С.', 'order': 2, 'time_from': 0.0, 'time_to': 2.83113883008419, 'arrival': 1.5811388300841898, 'pickup': 1.5811388300841898, 'price': 22.64911064067352, 'point_from': (0; 10), 'variant_name': 'asap', 'pickup_deviation': 6.41886116991581, 'total_efficiency': 0.5223298436039729, 'start_efficiency': 1, 'finish_efficiency': 0.9965372251378259, 'price_efficiency': 0.4609658872717005, 'pickup_accuracy_efficiency': 0}
+OrderAgent Посылка: {'courier': 'Сидоров С. С.', 'order': 2, 'time_from': 6.41886116991581, 'time_to': 9.25, 'arrival': 8.0, 'pickup': 8.0, 'price': 22.64911064067352, 'point_from': (0; 10), 'variant_name': 'jit_pickup', 'pickup_deviation': 0.0, 'total_efficiency': 0.5180778588576053, 'start_efficiency': 0.4831360877545485, 'finish_efficiency': 0.47088128991960077, 'price_efficiency': 0.4609658872717005, 'pickup_accuracy_efficiency': 1}
+OrderAgent Посылка: {'courier': 'Сидоров С. С.', 'order': 2, 'time_from': 12.168861169915811, 'time_to': 15.0, 'arrival': 13.75, 'pickup': 13.75, 'price': 22.64911064067352, 'point_from': (0; 10), 'variant_name': 'jit_delivery', 'pickup_deviation': 5.75, 'total_efficiency': 0.33510943483309596, 'start_efficiency': 0.020130670323106226, 'finish_efficiency': 0, 'price_efficiency': 0.4609658872717005, 'pickup_accuracy_efficiency': 0.10420246710594971}
+CourierAgent Иванов И. И. <- ActorAddr-/A~e: Запрос планирования
+CourierAgent Иванов И. И.: Принято, заказ 2
+OrderAgent Посылка <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+CourierAgent Иванов И. И. <- ActorAddr-/A~f: Запрос параметров
+CourierAgent Иванов И. И.: заказ 3 исключен по массе или объему
+CourierAgent Иванов И. И.: варианты []
+CourierAgent Петров П. П. <- ActorAddr-/A~f: Запрос параметров
+CourierAgent Петров П. П.: варианты [(0.0, 3.0, 36.0), (1.0, 4.0, 36.0), (12.0, 15.0, 36.0)]
+CourierAgent Сидоров С. С. <- ActorAddr-/A~f: Запрос параметров
+CourierAgent Сидоров С. С.: варианты [(0.0, 3.75, 30.0), (0.5, 4.25, 30.0), (11.25, 15.0, 30.0)]
+OrderAgent Коробка <- ActorAddr-/A~a: Ответ с параметрами
+OrderAgent Коробка <- ActorAddr-/A~b: Ответ с параметрами
+OrderAgent Коробка <- ActorAddr-/A~c: Ответ с параметрами
+OrderAgent Коробка: {'courier': 'Петров П. П.', 'order': 3, 'time_from': 0.0, 'time_to': 3.0, 'arrival': 2.0, 'pickup': 2.0, 'price': 36.0, 'point_from': (10; 0), 'variant_name': 'asap', 'pickup_deviation': 1.0, 'total_efficiency': 0.2909090909090909, 'start_efficiency': 1, 'finish_efficiency': 1, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 0.9090909090909091}
+OrderAgent Коробка: {'courier': 'Петров П. П.', 'order': 3, 'time_from': 1.0, 'time_to': 4.0, 'arrival': 3.0, 'pickup': 3.0, 'price': 36.0, 'point_from': (10; 0), 'variant_name': 'jit_pickup', 'pickup_deviation': 0.0, 'total_efficiency': 0.2833333333333333, 'start_efficiency': 0.9166666666666666, 'finish_efficiency': 0.9166666666666666, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 1}
+OrderAgent Коробка: {'courier': 'Петров П. П.', 'order': 3, 'time_from': 12.0, 'time_to': 15.0, 'arrival': 14.0, 'pickup': 14.0, 'price': 36.0, 'point_from': (10; 0), 'variant_name': 'jit_delivery', 'pickup_deviation': 11.0, 'total_efficiency': 0.0, 'start_efficiency': 0, 'finish_efficiency': 0, 'price_efficiency': 0, 'pickup_accuracy_efficiency': 0}
+OrderAgent Коробка: {'courier': 'Сидоров С. С.', 'order': 3, 'time_from': 0.0, 'time_to': 3.75, 'arrival': 2.5, 'pickup': 2.5, 'price': 30.0, 'point_from': (0; 10), 'variant_name': 'asap', 'pickup_deviation': 0.5, 'total_efficiency': 0.9850378787878787, 'start_efficiency': 0.9583333333333334, 'finish_efficiency': 0.9375, 'price_efficiency': 1, 'pickup_accuracy_efficiency': 0.9545454545454546}
+OrderAgent Коробка: {'courier': 'Сидоров С. С.', 'order': 3, 'time_from': 0.5, 'time_to': 4.25, 'arrival': 3.0, 'pickup': 3.0, 'price': 30.0, 'point_from': (0; 10), 'variant_name': 'jit_pickup', 'pickup_deviation': 0.0, 'total_efficiency': 0.98125, 'start_efficiency': 0.9166666666666666, 'finish_efficiency': 0.8958333333333334, 'price_efficiency': 1, 'pickup_accuracy_efficiency': 1}
+OrderAgent Коробка: {'courier': 'Сидоров С. С.', 'order': 3, 'time_from': 11.25, 'time_to': 15.0, 'arrival': 13.75, 'pickup': 13.75, 'price': 30.0, 'point_from': (0; 10), 'variant_name': 'jit_delivery', 'pickup_deviation': 10.75, 'total_efficiency': 0.7043560606060606, 'start_efficiency': 0.02083333333333337, 'finish_efficiency': 0, 'price_efficiency': 1, 'pickup_accuracy_efficiency': 0.022727272727272707}
+CourierAgent Сидоров С. С. <- ActorAddr-/A~f: Запрос планирования
+CourierAgent Сидоров С. С.: Принято, заказ 3
+OrderAgent Коробка <- ActorAddr-/A~c: Результат планирования

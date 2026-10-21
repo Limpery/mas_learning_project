@@ -39,3 +39,27 @@ class AgentBase(Actor):
     def send(self, target, message):
         self.dispatcher.message_counts[message.msg_type.value] += 1
         super().send(target, message)
+
+    @staticmethod
+    def get_decreasing_kpi_value(value, min_value, max_value):
+        if max_value == min_value:
+            return 1
+        if value > max_value or value < min_value:
+            return -1
+        if abs(value - min_value) < 0.000001:
+            return 1
+        if abs(value - max_value) < 0.000001:
+            return 0
+        return 1 - (value - min_value) / (max_value - min_value)
+
+    @staticmethod
+    def get_increasing_kpi_value(value, min_value, max_value):
+        if max_value == min_value:
+            return 1
+        if value > max_value or value < min_value:
+            return -1
+        if abs(value - min_value) < 0.000001:
+            return 0
+        if abs(value - max_value) < 0.000001:
+            return 1
+        return (value - min_value) / (max_value - min_value)

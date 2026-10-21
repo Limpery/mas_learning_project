@@ -43,19 +43,36 @@ class CourierEntity(BaseEntity):
                 or order.volume > self.max_volume or self.velocity <= 0):
             return []
         start = self.get_last_time()
-        arrival = start + self.get_last_point().get_distance_to_other(order.point_from) / self.velocity
-        pickup = max(arrival, order.time_from)
-        end = pickup + order.point_from.get_distance_to_other(order.point_to) / self.velocity
-        return [{'courier': self, 'order': order, 'time_from': start, 'time_to': end,
-                 'arrival': arrival, 'pickup': pickup, 'price': (end - start) * self.rate,
-                 'point_from': self.get_last_point(), 'variant_name': 'asap'}]
+        time_to_order = self.get_last_point().get_distance_to_other(order.point_from) / self.velocity
+        time_with_order = order.point_from.get_distance_to_other(order.point_to) / self.velocity
+        duration = time_to_order + time_with_order
+
+        def make_variant(departure, name):
+            pickup = departure + time_to_order
+            return {'courier': self, 'order': order, 'time_from': departure,
+                    'time_to': pickup + time_with_order, 'arrival': pickup, 'pickup': pickup,
+                    'price': duration * self.rate, 'point_from': self.get_last_point(),
+                    'variant_name': name, 'pickup_deviation': abs(pickup - order.time_from)}
+
+        variants = [make_variant(start, 'asap')]
+        # Как в методичке: JIT предлагается для пока пустого расписания.
+        if not self.schedule:
+            pickup_departure = order.time_from - time_to_order
+            if pickup_departure > 0:
+                variants.append(make_variant(pickup_departure, 'jit_pickup'))
+            delivery_departure = order.time_to - duration
+            if delivery_departure > 0:
+                variants.append(make_variant(delivery_departure, 'jit_delivery'))
+        return variants
 
     def add_order_to_schedule(self, order, start_time, end_time, price, params):
         # Пересчитываем предложение: после ответа другому заказу оно могло устареть.
         variants = self.get_variants(order)
         if not variants:
             return False
-        current = variants[0]
+        current = next((v for v in variants if v['variant_name'] == params['variant_name']), None)
+        if current is None:
+            return False
         if (self.get_conflicts(start_time, end_time)
                 or params['point_from'] != current['point_from']
                 or any(not math.isclose(params[key], current[key], abs_tol=1e-9)

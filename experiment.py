@@ -1,49 +1,44 @@
-"""СР3: 50 заказов, 20 курьеров, опрос всех и трех ближайших."""
+"""ЛР4: три прогона на одинаковых данных с разными весами критериев."""
 
 import csv
-import random
+import json
 from pathlib import Path
 
 from main import plan_orders
-from message import MessageType
+from utils.config_utils import load_planning_config
+from utils.excel_utils import get_excel_data
+from utils.schedule_utils import save_schedule
 
 
-def make_experiment_data():
-    rng = random.Random(3)
-    couriers = [
-        {'Табельный номер': i, 'ФИО': f'Курьер {i}',
-         'Координата начального положения x': rng.randint(0, 100),
-         'Координата начального положения y': rng.randint(0, 100),
-         'Типы доставляемых заказов': 'Посылка', 'Стоимость выхода на работу': 0,
-         'Цена работы за единицу времени': 1, 'Скорость': 10,
-         'Объем ранца': 10, 'Грузоподъемность': 10}
-        for i in range(1, 21)]
-    orders = [
-        {'Номер': i, 'Наименование': f'Заказ {i}', 'Масса': 1, 'Объем': 1, 'Стоимость': 100,
-         'Координата получения x': rng.randint(0, 100),
-         'Координата получения y': rng.randint(0, 100),
-         'Координата доставки x': rng.randint(0, 100),
-         'Координата доставки y': rng.randint(0, 100),
-         'Время получения заказа': 0, 'Время доставки заказа': 10000, 'Тип заказа': 'Посылка'}
-        for i in range(1, 51)]
-    return couriers, orders
-
-
-def run_experiment(filename='Отчёты/Эксперимент_ЛР3.csv'):
-    couriers, orders = make_experiment_data()
+def run_experiment(input_file='Исходные данные.xlsx', config_file='planning_config.json',
+                   output_dir='Отчёты'):
+    output_dir = Path(output_dir)
+    output_dir.mkdir(exist_ok=True)
+    couriers = get_excel_data(input_file, 'Курьеры')
+    orders = get_excel_data(input_file, 'Заказы')
+    with open(config_file, encoding='utf-8') as file:
+        config = json.load(file)
     rows = []
-    for count in (None, 3):
-        scene, counters = plan_orders(couriers, orders, count)
-        row = {'Режим': 'Все 20 курьеров' if count is None else '3 ближайших',
-               'Заказов': len(orders), 'Курьеров': len(couriers)}
-        row.update({kind.value: counters.get(kind.value, 0) for kind in MessageType
-                    if kind != MessageType.INIT_MESSAGE})
-        row['Всего сообщений'] = sum(counters.values())
-        row['Назначено заказов'] = sum(o.assigned_courier is not None
-                                      for o in scene.get_entities_by_type('ORDER'))
+    for profile in config['profiles']:
+        _, criteria = load_planning_config(config_file, profile)
+        weights = {item['name']: item['weight'] for item in criteria}
+        # Каждый прогон создает новые сущности с пустыми расписаниями.
+        scene, _ = plan_orders(couriers, orders, criteria)
+        save_schedule(scene, output_dir / f'Расписание_ЛР4_{profile}.csv')
+        assigned = [o for o in scene.get_entities_by_type('ORDER') if o.selected_variant]
+        in_window = sum(o.time_from - 1e-9 <= o.selected_variant['time_to'] <= o.time_to + 1e-9
+                        for o in assigned)
+        row = {'Профиль': profile,
+               'Вес получения': weights.get('start_efficiency', 0),
+               'Вес доставки': weights.get('finish_efficiency', 0),
+               'Вес стоимости': weights.get('price_efficiency', 0),
+               'Вес точности получения': weights.get('pickup_accuracy_efficiency', 0),
+               'Стоимость плана': round(sum(item.cost for courier in scene.get_entities_by_type('COURIER')
+                                            for item in courier.schedule), 4),
+               'Назначено': len(assigned), 'Доставлено в окне': in_window}
         rows.append(row)
         print(row)
-    with open(filename, 'w', encoding='utf-8-sig', newline='') as file:
+    with (output_dir / 'Сравнение_ЛР4.csv').open('w', encoding='utf-8-sig', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=list(rows[0]), delimiter=';')
         writer.writeheader()
         writer.writerows(rows)
@@ -51,4 +46,5 @@ def run_experiment(filename='Отчёты/Эксперимент_ЛР3.csv'):
 
 
 if __name__ == '__main__':
-    run_experiment(Path(__file__).resolve().parent / 'Отчёты/Эксперимент_ЛР3.csv')
+    root = Path(__file__).resolve().parent
+    run_experiment(root / 'Исходные данные.xlsx', root / 'planning_config.json', root / 'Отчёты')

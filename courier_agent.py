@@ -11,7 +11,12 @@ class CourierAgent(AgentBase):
         self.subscribe(MessageType.PLANNING_REQUEST, self.handle_planning_request)
 
     def handle_price_request(self, message, sender):
-        variants = self.entity.get_variants(message.msg_body)
+        order = message.msg_body
+        if order.weight > self.entity.max_mass or order.volume > self.entity.max_volume:
+            logging.info('%s: заказ %s исключен по массе или объему', self.name, order.number)
+            variants = []
+        else:
+            variants = self.entity.get_variants(order)
         logging.info('%s: варианты %s', self.name,
                      [(v['time_from'], v['time_to'], v['price']) for v in variants])
         self.send(sender, Message(MessageType.PRICE_RESPONSE, variants))

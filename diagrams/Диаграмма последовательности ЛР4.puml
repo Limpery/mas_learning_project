@@ -1,0 +1,22 @@
+@startuml
+title ЛР4 — матчинг и выбор по линейной свертке
+participant Заказ
+participant "Курьер 1\nподходящий" as К1
+participant "Курьер 2\nдругой тип" as К2
+participant "Курьер 3\nмалая вместимость" as К3
+note over Заказ: Матчинг по типу груза\nКурьер 2 исключен до отправки
+Заказ -> К1: PRICE_REQUEST
+Заказ -> К3: PRICE_REQUEST
+note over К1: Проверка массы и объема\nasap, jit_pickup, jit_delivery
+К1 --> Заказ: PRICE_RESPONSE (варианты)
+note over К3: Масса или объем превышены
+К3 --> Заказ: PRICE_RESPONSE (пустой список)
+note over Заказ: Все ответы получены\nНормировка четырех критериев\nОценка как сумма весов и нормированных значений\nСортировка по убыванию оценки
+Заказ -> К1: PLANNING_REQUEST (лучший вариант)
+alt Вариант выполним
+К1 --> Заказ: PLANNING_RESPONSE (True)
+else Вариант устарел
+К1 --> Заказ: PLANNING_RESPONSE (False)
+note over Заказ: Следующий вариант или новый опрос
+end
+@enduml
