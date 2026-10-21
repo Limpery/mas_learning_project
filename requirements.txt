@@ -1,0 +1,3 @@
+thespian
+pandas
+openpyxl

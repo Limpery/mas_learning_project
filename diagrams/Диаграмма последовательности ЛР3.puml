@@ -1,0 +1,24 @@
+@startuml
+title ЛР3 — переговоры двух заказов и двух курьеров
+participant Заказ1
+participant Заказ2
+participant Курьер1
+participant Курьер2
+note over Заказ1, Заказ2: Формирование списка курьеров
+Заказ1 -> Курьер1: PRICE_REQUEST
+Заказ1 -> Курьер2: PRICE_REQUEST
+Заказ2 -> Курьер1: PRICE_REQUEST
+Заказ2 -> Курьер2: PRICE_REQUEST
+Курьер1 --> Заказ1: PRICE_RESPONSE (asap)
+Курьер2 --> Заказ1: PRICE_RESPONSE (asap)
+Курьер1 --> Заказ2: PRICE_RESPONSE (тот же слот)
+Курьер2 --> Заказ2: PRICE_RESPONSE (asap)
+note over Заказ1, Заказ2: Ожидание всех ответов, выбор первого варианта
+Заказ1 -> Курьер1: PLANNING_REQUEST
+Курьер1 --> Заказ1: PLANNING_RESPONSE (True)
+Заказ2 -> Курьер1: PLANNING_REQUEST (старый вариант)
+Курьер1 --> Заказ2: PLANNING_RESPONSE (False)\nОтказ, вариант уже невыполним
+Заказ2 -> Курьер2: PLANNING_REQUEST (следующий вариант)
+Курьер2 --> Заказ2: PLANNING_RESPONSE (True)
+note over Курьер1, Курьер2: Движение за грузом → ожидание → движение с грузом
+@enduml
