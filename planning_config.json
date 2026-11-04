@@ -1,14 +1,33 @@
 {
-  "default_profile": "Стоимость",
+  "default_profile": "ЛР5",
   "criteria": [
-    {"name": "start_efficiency", "field": "pickup", "direction": "decreasing"},
-    {"name": "finish_efficiency", "field": "time_to", "direction": "decreasing"},
-    {"name": "price_efficiency", "field": "price", "direction": "decreasing"},
-    {"name": "pickup_accuracy_efficiency", "field": "pickup_deviation", "direction": "decreasing"}
+    {
+      "name": "start_efficiency",
+      "field": "pickup",
+      "direction": "decreasing"
+    },
+    {
+      "name": "finish_efficiency",
+      "field": "time_to",
+      "direction": "decreasing"
+    },
+    {
+      "name": "price_efficiency",
+      "field": "price",
+      "direction": "decreasing"
+    },
+    {
+      "name": "pickup_accuracy_efficiency",
+      "field": "pickup_deviation",
+      "direction": "decreasing"
+    }
   ],
   "profiles": {
-    "Стоимость": {"start_efficiency": 0.1, "finish_efficiency": 0.1, "price_efficiency": 0.7, "pickup_accuracy_efficiency": 0.1},
-    "Скорость": {"start_efficiency": 0.2, "finish_efficiency": 0.6, "price_efficiency": 0.1, "pickup_accuracy_efficiency": 0.1},
-    "Точность получения": {"start_efficiency": 0.05, "finish_efficiency": 0.05, "price_efficiency": 0.1, "pickup_accuracy_efficiency": 0.8}
+    "ЛР5": {
+      "start_efficiency": 0.2,
+      "finish_efficiency": 0.3,
+      "price_efficiency": 0.5,
+      "pickup_accuracy_efficiency": 0
+    }
   }
 }

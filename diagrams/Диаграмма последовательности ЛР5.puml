@@ -1,0 +1,27 @@
+@startuml
+title ЛР5 — вытеснение с согласованием и перепланированием
+participant "Новый заказ" as N
+participant "Курьер" as C
+participant "Вытесняемый заказ" as V
+N -> C: PRICE_REQUEST
+C --> N: PRICE_RESPONSE (asap, jit, conflict)
+note over N: Нормировка и выбор по свертке
+N -> C: PLANNING_REQUEST (conflict, черновик)
+note over C: Копия расписания\nУдаляются все записи вытесняемых заказов\nРеальное расписание пока сохранено
+C --> N: PLANNING_RESPONSE (True)
+loop Каждый вытесняемый заказ по убыванию цены
+N -> V: CONSENT_REQUEST
+V -> C: PRICE_REQUEST (черновик)
+C --> V: PRICE_RESPONSE
+V -> C: PLANNING_REQUEST (новое место)
+C --> V: PLANNING_RESPONSE
+note over V: При необходимости запрос согласия\nследующего, строго более дешевого заказа
+V --> N: CONSENT_RESPONSE (True или False)
+end
+alt Все согласились
+note over N,C: Фиксация согласованных расписаний
+N -> V: REMOVE_ORDER (новое место уже найдено)
+else Переезд невозможен
+note over N,C: Откат копии\nПопытка следующего варианта
+end
+@enduml

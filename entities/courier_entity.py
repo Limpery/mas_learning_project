@@ -1,3 +1,4 @@
+import logging
 import math
 
 from entities.base_entity import BaseEntity
@@ -12,7 +13,7 @@ class CourierEntity(BaseEntity):
         self.name = init_dict_data['ФИО']
         self.point = Point(float(init_dict_data['Координата начального положения x']),
                            float(init_dict_data['Координата начального положения y']))
-        self.types = [item.strip() for item in init_dict_data['Типы доставляемых заказов'].split(';')]
+        self.types = [s.strip() for s in init_dict_data['Типы доставляемых заказов'].split(';')]
         self.start_cost = float(init_dict_data['Стоимость выхода на работу'])
         self.rate = float(init_dict_data['Цена работы за единицу времени'])
         self.velocity = float(init_dict_data['Скорость'])
@@ -30,61 +31,106 @@ class CourierEntity(BaseEntity):
     def get_last_time(self):
         return self.schedule[-1].end_time if self.schedule else 0.0
 
-    def get_conflicts(self, start_time, end_time):
-        # Полуоткрытые интервалы: касание границ конфликтом не считается.
+    def get_all_order_records(self, order, schedule=None):
+        schedule = self.schedule if schedule is None else schedule
+        return [item for item in schedule if item.order is order]
+
+    def get_conflicts(self, start_time, end_time, schedule=None):
+        schedule = self.schedule if schedule is None else schedule
         if start_time >= end_time:
             return []
-        return [item for item in self.schedule
-                if item.start_time < item.end_time
+        return [item for item in schedule if item.rec_type != 'Ожидание'
+                and item.start_time < item.end_time
                 and item.start_time < end_time and start_time < item.end_time]
 
-    def get_variants(self, order):
+    def get_conflicted_tasks(self, records, schedule=None):
+        tasks = {}
+        for record in records:
+            if record.order in tasks:
+                continue
+            items = self.get_all_order_records(record.order, schedule)
+            tasks[record.order] = {'start': min(i.start_time for i in items),
+                                   'end': max(i.end_time for i in items),
+                                   'cost': sum(i.cost for i in items)}
+        return tasks
+
+    def make_variant(self, order, start, point, name, removed=()):
+        to_order = point.get_distance_to_other(order.point_from) / self.velocity
+        with_order = order.point_from.get_distance_to_other(order.point_to) / self.velocity
+        pickup = start + to_order
+        return {'courier': self, 'order': order, 'time_from': start,
+                'time_to': pickup + with_order, 'arrival': pickup, 'pickup': pickup,
+                'price': (to_order + with_order) * self.rate, 'point_from': point,
+                'variant_name': name, 'pickup_deviation': abs(pickup - order.time_from),
+                'removed_orders': tuple(removed)}
+
+    def records_for(self, variant):
+        order = variant['order']
+        start, pickup, end = (variant[k] for k in ('time_from', 'pickup', 'time_to'))
+        return [ScheduleItem(order, 'Движение за грузом', start, pickup,
+                             variant['point_from'], order.point_from, (pickup-start)*self.rate, variant),
+                ScheduleItem(order, 'Ожидание', pickup, pickup,
+                             order.point_from, order.point_from, 0.0, variant),
+                ScheduleItem(order, 'Движение с грузом', pickup, end,
+                             order.point_from, order.point_to, (end-pickup)*self.rate, variant)]
+
+    def preview(self, variant, schedule):
+        removed = variant['removed_orders']
+        remaining = [r for r in schedule if r.order not in removed]
+        if self.get_conflicts(variant['time_from'], variant['time_to'], remaining):
+            return None
+        result = sorted(remaining + self.records_for(variant), key=lambda r: r.start_time)
+        # Проверяем также координаты: отсутствие пересечений само по себе недостаточно.
+        point, time = self.point, 0.0
+        for item in result:
+            if item.start_time < time - 1e-9 or item.point_from != point:
+                return None
+            point, time = item.point_to, item.end_time
+        return result
+
+    def get_variants(self, order, schedule=None, conflicts=False, multiple=True, ancestors=()):
+        schedule = self.schedule if schedule is None else schedule
         if (order.order_type not in self.types or order.weight > self.max_mass
                 or order.volume > self.max_volume or self.velocity <= 0):
             return []
-        start = self.get_last_time()
-        time_to_order = self.get_last_point().get_distance_to_other(order.point_from) / self.velocity
-        time_with_order = order.point_from.get_distance_to_other(order.point_to) / self.velocity
-        duration = time_to_order + time_with_order
-
-        def make_variant(departure, name):
-            pickup = departure + time_to_order
-            return {'courier': self, 'order': order, 'time_from': departure,
-                    'time_to': pickup + time_with_order, 'arrival': pickup, 'pickup': pickup,
-                    'price': duration * self.rate, 'point_from': self.get_last_point(),
-                    'variant_name': name, 'pickup_deviation': abs(pickup - order.time_from)}
-
-        variants = [make_variant(start, 'asap')]
-        # Как в методичке: JIT предлагается для пока пустого расписания.
-        if not self.schedule:
-            pickup_departure = order.time_from - time_to_order
-            if pickup_departure > 0:
-                variants.append(make_variant(pickup_departure, 'jit_pickup'))
-            delivery_departure = order.time_to - duration
-            if delivery_departure > 0:
-                variants.append(make_variant(delivery_departure, 'jit_delivery'))
+        last_point = schedule[-1].point_to if schedule else self.point
+        last_time = schedule[-1].end_time if schedule else 0.0
+        variants = [self.make_variant(order, last_time, last_point, 'asap')]
+        time_to_order = last_point.get_distance_to_other(order.point_from) / self.velocity
+        jit_start = order.time_from - time_to_order
+        jit = self.make_variant(order, jit_start, last_point, 'jit_pickup')
+        if jit_start > 0 and self.preview(jit, schedule) is not None:
+            variants.append(jit)
+        if not schedule:
+            duration = variants[0]['time_to'] - variants[0]['time_from']
+            departure = order.time_to - duration
+            if departure > 0:
+                variants.append(self.make_variant(order, departure, last_point, 'jit_delivery'))
+        if not conflicts or jit_start <= 0:
+            return variants
+        records = self.get_conflicts(jit_start, jit['time_to'], schedule)
+        tasks = self.get_conflicted_tasks(records, schedule)
+        logging.info('%s: конфликтующие заказы %s', self.name,
+                     {o.number: summary for o, summary in tasks.items()})
+        cheaper = sorted((o for o in tasks if o.price < order.price and o not in ancestors),
+                         key=lambda o: (o.price, str(o.number)))
+        if not cheaper:
+            return variants
+        groups = [(cheaper[0],)]
+        if multiple and len(cheaper) > 1 and len(cheaper) == len(tasks):
+            groups.append(tuple(cheaper))
+        for removed in groups:
+            first = min((r for o in removed for r in self.get_all_order_records(o, schedule)),
+                        key=lambda r: r.start_time)
+            variant = self.make_variant(order, first.start_time, first.point_from, 'conflict', removed)
+            if self.preview(variant, schedule) is not None:
+                logging.info('%s: вариант conflict, вытеснение %s', self.name, [o.number for o in removed])
+                variants.append(variant)
         return variants
 
     def add_order_to_schedule(self, order, start_time, end_time, price, params):
-        # Пересчитываем предложение: после ответа другому заказу оно могло устареть.
-        variants = self.get_variants(order)
-        if not variants:
+        result = self.preview(params, self.schedule)
+        if result is None:
             return False
-        current = next((v for v in variants if v['variant_name'] == params['variant_name']), None)
-        if current is None:
-            return False
-        if (self.get_conflicts(start_time, end_time)
-                or params['point_from'] != current['point_from']
-                or any(not math.isclose(params[key], current[key], abs_tol=1e-9)
-                       for key in ('time_from', 'time_to', 'price', 'arrival', 'pickup'))):
-            return False
-        arrival, pickup = params['arrival'], params['pickup']
-        self.schedule.extend([
-            ScheduleItem(order, 'Движение за грузом', start_time, arrival,
-                         self.get_last_point(), order.point_from, (arrival - start_time) * self.rate, params),
-            ScheduleItem(order, 'Ожидание', arrival, pickup,
-                         order.point_from, order.point_from, (pickup - arrival) * self.rate, params),
-            ScheduleItem(order, 'Движение с грузом', pickup, end_time,
-                         order.point_from, order.point_to, (end_time - pickup) * self.rate, params),
-        ])
+        self.schedule = result
         return True

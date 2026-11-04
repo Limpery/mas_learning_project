@@ -12,12 +12,19 @@ TYPES_AGENTS = {'ORDER': OrderAgent, 'COURIER': CourierAgent}
 
 
 class AgentsDispatcher:
-    def __init__(self, scene, criteria):
+    def __init__(self, scene, criteria, enable_conflicts=True, multiple=True, require_consent=True):
         # Учебная сцена передается по ссылке в одном процессе.
         self.actor_system = ActorSystem('simpleSystemBase', logDefs=False)
         self.reference_book = ReferenceBook()
         self.scene = scene
         self.criteria = criteria
+        self.enable_conflicts = enable_conflicts
+        self.multiple = multiple
+        self.require_consent = require_consent
+        self.displacements = 0
+        self.refusals = 0
+        self.max_depth = 0
+        self.max_group = 0
         self.message_counts = Counter()
 
     def add_entity(self, entity):

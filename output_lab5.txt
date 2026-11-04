@@ -1,0 +1,67 @@
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Посылка 1: новый опрос, глубина переговоров 0
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~b: Запрос параметров
+OrderAgent Посылка 1 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~b: Запрос планирования
+CourierAgent Лермонтов М. Ю.: размещен asap для заказа 1; вытеснение []
+OrderAgent Посылка 1 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Посылка 2: новый опрос, глубина переговоров 0
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~c: Запрос параметров
+OrderAgent Посылка 2 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~c: Запрос планирования
+CourierAgent Лермонтов М. Ю.: размещен asap для заказа 2; вытеснение []
+OrderAgent Посылка 2 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Доставка документов: новый опрос, глубина переговоров 0
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~d: Запрос параметров
+OrderAgent Доставка документов <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~d: Запрос планирования
+CourierAgent Лермонтов М. Ю.: размещен asap для заказа 3; вытеснение []
+OrderAgent Доставка документов <- ActorAddr-/A~a: Результат планирования
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Посылка 1: новый опрос, глубина переговоров 0
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~b: Запрос параметров
+Лермонтов М. Ю.: конфликтующие заказы {}
+OrderAgent Посылка 1 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~b: Запрос планирования
+Лермонтов М. Ю.: конфликтующие заказы {}
+CourierAgent Лермонтов М. Ю.: размещен asap для заказа 1; вытеснение []
+OrderAgent Посылка 1 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Посылка 2: новый опрос, глубина переговоров 0
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~c: Запрос параметров
+Лермонтов М. Ю.: конфликтующие заказы {}
+OrderAgent Посылка 2 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~c: Запрос планирования
+Лермонтов М. Ю.: конфликтующие заказы {}
+CourierAgent Лермонтов М. Ю.: размещен asap для заказа 2; вытеснение []
+OrderAgent Посылка 2 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Доставка документов: новый опрос, глубина переговоров 0
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~d: Запрос параметров
+Лермонтов М. Ю.: конфликтующие заказы {1: {'start': 0.0, 'end': 2.0, 'cost': 10.0}, 2: {'start': 2.0, 'end': 4.0, 'cost': 10.0}}
+Лермонтов М. Ю.: вариант conflict, вытеснение [2]
+OrderAgent Доставка документов <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~d: Запрос планирования
+Лермонтов М. Ю.: конфликтующие заказы {1: {'start': 0.0, 'end': 2.0, 'cost': 10.0}, 2: {'start': 2.0, 'end': 4.0, 'cost': 10.0}}
+Лермонтов М. Ю.: вариант conflict, вытеснение [2]
+CourierAgent Лермонтов М. Ю.: размещен conflict для заказа 3; вытеснение [2]
+OrderAgent Доставка документов <- ActorAddr-/A~a: Результат планирования
+OrderAgent Доставка документов: запрос согласия заказа 2
+OrderAgent Посылка 2 <- ActorAddr-/A~d: Запрос согласия
+OrderAgent Посылка 2: новый опрос, глубина переговоров 1
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~c: Запрос параметров
+Лермонтов М. Ю.: конфликтующие заказы {3: {'start': 2.0, 'end': 6.0, 'cost': 20.0}}
+OrderAgent Посылка 2 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Лермонтов М. Ю. <- ActorAddr-/A~c: Запрос планирования
+Лермонтов М. Ю.: конфликтующие заказы {3: {'start': 2.0, 'end': 6.0, 'cost': 20.0}}
+CourierAgent Лермонтов М. Ю.: размещен asap для заказа 2; вытеснение []
+OrderAgent Посылка 2 <- ActorAddr-/A~a: Результат планирования
+OrderAgent Посылка 2: согласие=True; текущее место до фиксации сохранено
+OrderAgent Доставка документов <- ActorAddr-/A~c: Ответ о согласии
+REMOVE_ORDER: заказ 2 вытеснен с Лермонтов М. Ю.
+OrderAgent Посылка 2 <- ActorAddr-/A~d: Удаление заказа
+OrderAgent Посылка 2: REMOVE_ORDER от курьера Лермонтов М. Ю.

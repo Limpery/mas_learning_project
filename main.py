@@ -1,4 +1,4 @@
-"""ЛР4. Запуск: python main.py. Сравнение весов: python experiment.py."""
+"""ЛР5: сравнение расписаний без конфликтов и с их разрешением."""
 
 import logging
 from pathlib import Path
@@ -12,41 +12,32 @@ from utils.schedule_utils import save_schedule
 from utils.config_utils import load_planning_config
 
 
-def plan_orders(courier_data, order_data, criteria):
+def plan_orders(courier_data, order_data, criteria, enable_conflicts=True,
+                multiple=False, require_consent=True):
     scene = Scene()
-    dispatcher = AgentsDispatcher(scene, criteria)
+    dispatcher = AgentsDispatcher(scene, criteria, enable_conflicts, multiple, require_consent)
     try:
-        # Курьеры должны быть в сцене до начала переговоров заказов.
         for row in courier_data:
             dispatcher.add_entity(CourierEntity({}, row, scene))
         for row in order_data:
             dispatcher.add_entity(OrderEntity({}, row, scene))
-        return scene, dict(dispatcher.message_counts)
+        stats = {'Сообщений': sum(dispatcher.message_counts.values()),
+                 'Вытеснений': dispatcher.displacements, 'Отказов уступить': dispatcher.refusals,
+                 'Глубина переговоров': dispatcher.max_depth,
+                 'Максимум вытесненных за раз': dispatcher.max_group}
+        return scene, stats
     finally:
         dispatcher.actor_system.shutdown()
 
 
-def main(input_file='Исходные данные.xlsx', output_file='Отчёты/Расписание_ЛР4.csv',
-         config_file='planning_config.json', profile=None):
-    profile, criteria = load_planning_config(config_file, profile)
-    scene, counts = plan_orders(get_excel_data(input_file, 'Курьеры'),
-                               get_excel_data(input_file, 'Заказы'), criteria)
-    save_schedule(scene, output_file)
-    for order in scene.get_entities_by_type('ORDER'):
-        courier = order.assigned_courier
-        variant = order.selected_variant
-        details = (f", {variant['variant_name']}, цена {variant['price']:.4f}, "
-                   f"оценка {variant['total_efficiency']:.4f}" if variant else '')
-        print(f'Заказ {order.number}: {courier.name if courier else "не назначен"}{details}')
-    print('Профиль:', profile)
-    print('Сообщений переговоров:', sum(counts.values()))
-    print('Расписание:', output_file)
-    return scene, counts
+def main(input_file='Исходные данные_конфликт.xlsx', output_dir='Отчёты',
+         config_file='planning_config.json'):
+    from experiment import run_experiment
+    return run_experiment(input_file, config_file, output_dir)
 
 
 if __name__ == '__main__':
     root = Path(__file__).resolve().parent
     logging.basicConfig(level=logging.INFO, format='%(message)s', force=True,
-                        handlers=[logging.FileHandler(root / 'output_lab4.txt', encoding='utf-8', mode='w')])
-    main(root / 'Исходные данные.xlsx', root / 'Отчёты/Расписание_ЛР4.csv',
-         root / 'planning_config.json')
+                        handlers=[logging.FileHandler(root / 'output_lab5.txt', encoding='utf-8', mode='w')])
+    main(root / 'Исходные данные_конфликт.xlsx', root / 'Отчёты', root / 'planning_config.json')
