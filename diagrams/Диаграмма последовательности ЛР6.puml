@@ -1,0 +1,24 @@
+@startuml
+title ЛР6 — локальная реакция на события
+participant "Другой курьер" as C1
+participant "Курьер" as C2
+participant "Заказ 1" as O1
+participant "Заказ 2" as O2
+note over C2: Появление и инициализация
+C2 -> O1: NEW_COURIER
+note over O1: Уже размещен — без перепланирования
+C2 -> O2: NEW_COURIER
+O2 -> C2: PRICE_REQUEST
+C2 --> O2: PRICE_RESPONSE
+O2 -> C2: PLANNING_REQUEST
+C2 --> O2: PLANNING_RESPONSE
+note over C2: Удаление: is_deleting = True\nActorExitRequest
+C2 -> O1: DELETED_COURIER
+note over O1: Назначен на другого курьера — без изменений
+C2 -> O2: DELETED_COURIER
+O2 -> C1: PRICE_REQUEST
+C1 --> O2: PRICE_RESPONSE
+O2 -> C1: PLANNING_REQUEST
+C1 --> O2: PLANNING_RESPONSE
+note over C1,O2: Пересматривается только затронутое назначение
+@enduml

@@ -1,5 +1,5 @@
 {
-  "default_profile": "ЛР5",
+  "default_profile": "ЛР6",
   "criteria": [
     {
       "name": "start_efficiency",
@@ -23,7 +23,7 @@
     }
   ],
   "profiles": {
-    "ЛР5": {
+    "ЛР6": {
       "start_efficiency": 0.2,
       "finish_efficiency": 0.3,
       "price_efficiency": 0.5,

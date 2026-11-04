@@ -1,0 +1,173 @@
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Заказ 1 <- ActorAddr-/A~c: Начать переговоры
+OrderAgent Заказ 1: новый опрос, глубина переговоров 0
+CourierAgent Курьер А <- ActorAddr-/A~c: Запрос параметров
+CourierAgent Курьер Б <- ActorAddr-/A~c: Запрос параметров
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Ответ с параметрами
+OrderAgent Заказ 1 <- ActorAddr-/A~b: Ответ с параметрами
+CourierAgent Курьер А <- ActorAddr-/A~c: Запрос планирования
+CourierAgent Курьер А: размещен asap для заказа 1; вытеснение []
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Заказ 2 <- ActorAddr-/A~d: Начать переговоры
+OrderAgent Заказ 2: новый опрос, глубина переговоров 0
+CourierAgent Курьер А <- ActorAddr-/A~d: Запрос параметров
+CourierAgent Курьер Б <- ActorAddr-/A~d: Запрос параметров
+OrderAgent Заказ 2 <- ActorAddr-/A~a: Ответ с параметрами
+OrderAgent Заказ 2 <- ActorAddr-/A~b: Ответ с параметрами
+CourierAgent Курьер А <- ActorAddr-/A~d: Запрос планирования
+CourierAgent Курьер А: размещен asap для заказа 2; вытеснение []
+OrderAgent Заказ 2 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Ночной заказ <- ActorAddr-/A~e: Начать переговоры
+OrderAgent Ночной заказ: новый опрос, глубина переговоров 0
+CourierAgent Курьер Б <- ActorAddr-/A~e: Запрос параметров
+OrderAgent Ночной заказ <- ActorAddr-/A~b: Ответ с параметрами
+CourierAgent Курьер Б <- ActorAddr-/A~e: Запрос планирования
+CourierAgent Курьер Б: размещен asap для заказа 3; вытеснение []
+OrderAgent Ночной заказ <- ActorAddr-/A~b: Результат планирования
+СОБЫТИЕ: {'action': 'add', 'entity_type': 'ORDER', 'data': {'Номер': 4, 'Наименование': 'Новый обычный', 'Масса': 1, 'Объем': 1, 'Стоимость': 100, 'Координата получения x': 5, 'Координата получения y': 0, 'Координата доставки x': 0, 'Координата доставки y': 0, 'Время получения заказа': 0, 'Время доставки заказа': 50, 'Тип заказа': 'Обычный'}}
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Новый обычный <- ActorAddr-/A~f: Начать переговоры
+OrderAgent Новый обычный: новый опрос, глубина переговоров 0
+CourierAgent Курьер А <- ActorAddr-/A~f: Запрос параметров
+CourierAgent Курьер Б <- ActorAddr-/A~f: Запрос параметров
+OrderAgent Новый обычный <- ActorAddr-/A~a: Ответ с параметрами
+OrderAgent Новый обычный <- ActorAddr-/A~b: Ответ с параметрами
+CourierAgent Курьер А <- ActorAddr-/A~f: Запрос планирования
+CourierAgent Курьер А: размещен asap для заказа 4; вытеснение []
+OrderAgent Новый обычный <- ActorAddr-/A~a: Результат планирования
+СОБЫТИЕ: {'action': 'add', 'entity_type': 'ORDER', 'data': {'Номер': 5, 'Наименование': 'Срочный заказ', 'Масса': 1, 'Объем': 1, 'Стоимость': 100, 'Координата получения x': 5, 'Координата получения y': 0, 'Координата доставки x': 0, 'Координата доставки y': 0, 'Время получения заказа': 0, 'Время доставки заказа': 50, 'Тип заказа': 'Срочный'}}
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Срочный заказ <- ActorAddr-/A~g: Начать переговоры
+OrderAgent Срочный заказ: новый опрос, глубина переговоров 0
+OrderAgent Срочный заказ: подходящее размещение отсутствует
+СОБЫТИЕ: {'action': 'add', 'entity_type': 'COURIER', 'data': {'Табельный номер': 3, 'ФИО': 'Курьер В', 'Координата начального положения x': 0, 'Координата начального положения y': 0, 'Типы доставляемых заказов': 'Обычный;Срочный', 'Стоимость выхода на работу': 0, 'Цена работы за единицу времени': 0.5, 'Скорость': 5, 'Объем ранца': 10, 'Грузоподъемность': 10}}
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Заказ 1 <- ActorAddr-/A~h: Новый курьер
+OrderAgent Заказ 2 <- ActorAddr-/A~h: Новый курьер
+OrderAgent Новый обычный <- ActorAddr-/A~h: Новый курьер
+OrderAgent Срочный заказ <- ActorAddr-/A~h: Новый курьер
+OrderAgent Срочный заказ <- ActorAddr-/A~g: Начать переговоры
+OrderAgent Срочный заказ: новый опрос, глубина переговоров 0
+CourierAgent Курьер В <- ActorAddr-/A~g: Запрос параметров
+OrderAgent Срочный заказ <- ActorAddr-/A~h: Ответ с параметрами
+CourierAgent Курьер В <- ActorAddr-/A~g: Запрос планирования
+CourierAgent Курьер В: размещен asap для заказа 5; вытеснение []
+OrderAgent Срочный заказ <- ActorAddr-/A~h: Результат планирования
+СОБЫТИЕ: {'action': 'remove', 'entity_type': 'COURIER', 'name': 'Курьер А'}
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Курьер удален
+OrderAgent Заказ 2 <- ActorAddr-/A~a: Курьер удален
+OrderAgent Ночной заказ <- ActorAddr-/A~a: Курьер удален
+OrderAgent Новый обычный <- ActorAddr-/A~a: Курьер удален
+OrderAgent Срочный заказ <- ActorAddr-/A~a: Курьер удален
+OrderAgent Заказ 1 <- ActorAddr-/A~c: Начать переговоры
+OrderAgent Заказ 1: новый опрос, глубина переговоров 0
+CourierAgent Курьер Б <- ActorAddr-/A~c: Запрос параметров
+CourierAgent Курьер В <- ActorAddr-/A~c: Запрос параметров
+OrderAgent Заказ 1 <- ActorAddr-/A~b: Ответ с параметрами
+OrderAgent Заказ 1 <- ActorAddr-/A~h: Ответ с параметрами
+CourierAgent Курьер В <- ActorAddr-/A~c: Запрос планирования
+CourierAgent Курьер В: размещен asap для заказа 1; вытеснение []
+OrderAgent Заказ 1 <- ActorAddr-/A~h: Результат планирования
+OrderAgent Заказ 2 <- ActorAddr-/A~c: Начать переговоры
+OrderAgent Заказ 2: новый опрос, глубина переговоров 0
+CourierAgent Курьер Б <- ActorAddr-/A~d: Запрос параметров
+CourierAgent Курьер В <- ActorAddr-/A~d: Запрос параметров
+OrderAgent Заказ 2 <- ActorAddr-/A~b: Ответ с параметрами
+OrderAgent Заказ 2 <- ActorAddr-/A~h: Ответ с параметрами
+CourierAgent Курьер Б <- ActorAddr-/A~d: Запрос планирования
+CourierAgent Курьер Б: размещен asap для заказа 2; вытеснение []
+OrderAgent Заказ 2 <- ActorAddr-/A~b: Результат планирования
+OrderAgent Новый обычный <- ActorAddr-/A~d: Начать переговоры
+OrderAgent Новый обычный: новый опрос, глубина переговоров 0
+CourierAgent Курьер Б <- ActorAddr-/A~f: Запрос параметров
+CourierAgent Курьер В <- ActorAddr-/A~f: Запрос параметров
+OrderAgent Новый обычный <- ActorAddr-/A~b: Ответ с параметрами
+OrderAgent Новый обычный <- ActorAddr-/A~h: Ответ с параметрами
+CourierAgent Курьер В <- ActorAddr-/A~f: Запрос планирования
+CourierAgent Курьер В: размещен asap для заказа 4; вытеснение []
+OrderAgent Новый обычный <- ActorAddr-/A~h: Результат планирования
+CourierAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Заказ 1 <- ActorAddr-/A~b: Начать переговоры
+OrderAgent Заказ 1: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~b: Запрос параметров
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~b: Запрос планирования
+CourierAgent Курьер 1: размещен asap для заказа 1; вытеснение []
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Заказ 2 <- ActorAddr-/A~c: Начать переговоры
+OrderAgent Заказ 2: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~c: Запрос параметров
+OrderAgent Заказ 2 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~c: Запрос планирования
+CourierAgent Курьер 1: размещен asap для заказа 2; вытеснение []
+OrderAgent Заказ 2 <- ActorAddr-/A~a: Результат планирования
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Заказ 3 <- ActorAddr-/A~d: Начать переговоры
+OrderAgent Заказ 3: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~d: Запрос параметров
+OrderAgent Заказ 3 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~d: Запрос планирования
+CourierAgent Курьер 1: размещен asap для заказа 3; вытеснение []
+OrderAgent Заказ 3 <- ActorAddr-/A~a: Результат планирования
+СОБЫТИЕ: {'action': 'remove', 'entity_type': 'ORDER', 'name': 'Заказ 2'}
+CourierAgent Курьер 1 <- ActorAddr-/A~c: Освободить записи заказа
+СОБЫТИЕ: {'action': 'add', 'entity_type': 'ORDER', 'data': {'Номер': 4, 'Наименование': 'Замена', 'Масса': 1, 'Объем': 1, 'Стоимость': 100, 'Координата получения x': 5, 'Координата получения y': 0, 'Координата доставки x': 0, 'Координата доставки y': 0, 'Время получения заказа': 0, 'Время доставки заказа': 50, 'Тип заказа': 'Обычный'}}
+OrderAgent <- ActorAddr-System:ExternalRequester: Инициализация
+OrderAgent Замена <- ActorAddr-/A~e: Начать переговоры
+OrderAgent Замена: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~e: Запрос параметров
+OrderAgent Замена <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~e: Запрос планирования
+CourierAgent Курьер 1: размещен gap для заказа 4; вытеснение []
+OrderAgent Замена <- ActorAddr-/A~a: Результат планирования
+СОБЫТИЕ: {'action': 'change', 'entity_type': 'ORDER', 'name': 'Заказ 1', 'changes': {'time_from': 10, 'time_to': 12}}
+OrderAgent Заказ 1 <- ActorAddr-System:ExternalRequester: Параметры изменены
+CourierAgent Курьер 1 <- ActorAddr-/A~b: Освободить записи заказа
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Удаление заказа
+OrderAgent Заказ 1: REMOVE_ORDER от курьера Курьер 1
+OrderAgent Заказ 1 <- ActorAddr-/A~b: Начать переговоры
+OrderAgent Заказ 1: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~b: Запрос параметров
+Курьер 1: конфликтующие заказы {}
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~b: Запрос планирования
+Курьер 1: конфликтующие заказы {}
+CourierAgent Курьер 1: размещен gap для заказа 1; вытеснение []
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Результат планирования
+СОБЫТИЕ: {'action': 'change', 'entity_type': 'COURIER', 'name': 'Курьер 1', 'changes': {'velocity': 2.5}}
+CourierAgent Курьер 1 <- ActorAddr-System:ExternalRequester: Параметры изменены
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Удаление заказа
+OrderAgent Заказ 1: REMOVE_ORDER от курьера Курьер 1
+OrderAgent Замена <- ActorAddr-/A~a: Удаление заказа
+OrderAgent Замена: REMOVE_ORDER от курьера Курьер 1
+OrderAgent Заказ 3 <- ActorAddr-/A~a: Удаление заказа
+OrderAgent Заказ 3: REMOVE_ORDER от курьера Курьер 1
+OrderAgent Заказ 1 <- ActorAddr-/A~b: Начать переговоры
+OrderAgent Заказ 1: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~b: Запрос параметров
+Курьер 1: конфликтующие заказы {}
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~b: Запрос планирования
+Курьер 1: конфликтующие заказы {}
+CourierAgent Курьер 1: размещен asap для заказа 1; вытеснение []
+OrderAgent Заказ 1 <- ActorAddr-/A~a: Результат планирования
+OrderAgent Замена <- ActorAddr-/A~b: Начать переговоры
+OrderAgent Замена: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~e: Запрос параметров
+OrderAgent Замена <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~e: Запрос планирования
+CourierAgent Курьер 1: размещен asap для заказа 4; вытеснение []
+OrderAgent Замена <- ActorAddr-/A~a: Результат планирования
+OrderAgent Заказ 3 <- ActorAddr-/A~e: Начать переговоры
+OrderAgent Заказ 3: новый опрос, глубина переговоров 0
+CourierAgent Курьер 1 <- ActorAddr-/A~d: Запрос параметров
+OrderAgent Заказ 3 <- ActorAddr-/A~a: Ответ с параметрами
+CourierAgent Курьер 1 <- ActorAddr-/A~d: Запрос планирования
+CourierAgent Курьер 1: размещен asap для заказа 3; вытеснение []
+OrderAgent Заказ 3 <- ActorAddr-/A~a: Результат планирования

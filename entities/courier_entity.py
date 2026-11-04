@@ -106,6 +106,16 @@ class CourierEntity(BaseEntity):
             departure = order.time_to - duration
             if departure > 0:
                 variants.append(self.make_variant(order, departure, last_point, 'jit_delivery'))
+        # Свободные интервалы, в том числе появившиеся после удаления заказа.
+        point, start = self.point, 0.0
+        for existing_order in dict.fromkeys(r.order for r in schedule):
+            records = self.get_all_order_records(existing_order, schedule)
+            first, last = records[0], records[-1]
+            if first.start_time > start + 1e-9:
+                gap_variant = self.make_variant(order, start, point, 'gap')
+                if gap_variant['time_to'] <= first.start_time + 1e-9 and self.preview(gap_variant, schedule) is not None:
+                    variants.append(gap_variant)
+            point, start = last.point_to, last.end_time
         if not conflicts or jit_start <= 0:
             return variants
         records = self.get_conflicts(jit_start, jit['time_to'], schedule)
@@ -134,3 +144,20 @@ class CourierEntity(BaseEntity):
             return False
         self.schedule = result
         return True
+
+    def release_order(self, order):
+        remaining = [r for r in self.schedule if r.order is not order]
+        point = self.point
+        kept = []
+        affected = []
+        broken = False
+        for item in remaining:
+            broken = broken or item.point_from != point
+            if broken:
+                if item.order not in affected:
+                    affected.append(item.order)
+            else:
+                kept.append(item)
+                point = item.point_to
+        self.schedule = kept
+        return affected

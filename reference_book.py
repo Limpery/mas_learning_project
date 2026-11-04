@@ -13,3 +13,6 @@ class ReferenceBook:
         if address is None:
             logging.error('Агент %s отсутствует в адресной книге', entity.uri)
         return address
+
+    def remove_agent(self, entity):
+        self.agents_entities.pop(entity, None)

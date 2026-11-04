@@ -2,7 +2,7 @@
 
 import logging
 
-from thespian.actors import Actor
+from thespian.actors import Actor, ActorExitRequest
 
 from message import Message, MessageType
 
@@ -17,8 +17,13 @@ class AgentBase(Actor):
         self.handlers[msg_type] = handler
 
     def receiveMessage(self, message, sender):
+        if isinstance(message, ActorExitRequest):
+            self.handle_delete_message()
+            return
         if not isinstance(message, Message):
             return
+        if hasattr(self, 'entity'):
+            self.dispatcher.notified_agents.add(self.entity.uri)
         handler = self.handlers.get(message.msg_type)
         if handler is None:
             logging.warning('%s: нет обработчика %s', self.name, message.msg_type)
@@ -35,6 +40,9 @@ class AgentBase(Actor):
         self.dispatcher = message.msg_body['dispatcher']
         self.entity = message.msg_body['entity']
         self.name += ' ' + self.entity.name
+
+    def handle_delete_message(self):
+        self.entity.is_deleting = True
 
     def send(self, target, message):
         self.dispatcher.message_counts[message.msg_type.value] += 1

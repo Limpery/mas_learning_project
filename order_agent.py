@@ -15,6 +15,10 @@ class OrderAgent(AgentBase):
         self.parent = None
         self.ancestors = ()
         self.pending_victims = []
+        self.subscribe(MessageType.NEW_COURIER, self.handle_new_resource_message)
+        self.subscribe(MessageType.DELETED_COURIER, self.handle_delete_courier_message)
+        self.subscribe(MessageType.PARAMETERS_CHANGED, self.handle_parameters_changed)
+        self.subscribe(MessageType.START_PLANNING, self.handle_start_planning)
         self.subscribe(MessageType.PRICE_RESPONSE, self.handle_price_response)
         self.subscribe(MessageType.PLANNING_RESPONSE, self.handle_planning_response)
         self.subscribe(MessageType.REMOVE_ORDER, self.handle_remove_message)
@@ -23,9 +27,10 @@ class OrderAgent(AgentBase):
 
     def handle_init_message(self, message, sender):
         super().handle_init_message(message, sender)
-        self.send_params_request()
+        self.restart_planning()
 
     def send_params_request(self):
+        self.dispatcher.negotiating_orders.add(self.entity.uri)
         self.possible_variants = []
         couriers = [c for c in self.scene.get_entities_by_type('COURIER')
                     if self.entity.order_type in c.types]
@@ -139,6 +144,7 @@ class OrderAgent(AgentBase):
         else:
             logging.info('%s: подходящее размещение отсутствует', self.name)
         self.context = None
+        self.dispatcher.finish_planning(self.entity, self)
 
     def handle_remove_message(self, message, sender):
         logging.info('%s: REMOVE_ORDER от курьера %s', self.name, message.msg_body['courier'].name)
@@ -147,4 +153,47 @@ class OrderAgent(AgentBase):
         if not message.msg_body['relocated']:
             self.entity.assigned_courier = None
             self.entity.selected_variant = None
-            self.send_params_request()
+            self.restart_planning()
+
+    def restart_planning(self):
+        if self.entity.is_deleting:
+            return
+        self.possible_variants.clear()
+        self.context = None
+        self.selected_variant = None
+        self.parent = None
+        self.ancestors = ()
+        self.dispatcher.request_planning(self.entity, self)
+
+    def handle_start_planning(self, message, sender):
+        self.send_params_request()
+
+    def handle_new_resource_message(self, message, sender):
+        if self.entity.assigned_courier is None:
+            self.restart_planning()
+
+    def handle_delete_courier_message(self, message, sender):
+        if self.entity.assigned_courier is not message.msg_body:
+            return
+        self.entity.assigned_courier = None
+        self.entity.selected_variant = None
+        self.restart_planning()
+
+    def handle_parameters_changed(self, message, sender):
+        courier = self.entity.assigned_courier
+        if courier is None:
+            self.restart_planning()
+        else:
+            self.send(self.dispatcher.reference_book.get_address(courier),
+                      Message(MessageType.RELEASE_ORDER, {'order': self.entity, 'replan': True}))
+
+    def handle_delete_message(self):
+        super().handle_delete_message()
+        if self.dispatcher.closing:
+            return
+        courier = self.entity.assigned_courier
+        if courier is not None and not courier.is_deleting:
+            self.send(self.dispatcher.reference_book.get_address(courier),
+                      Message(MessageType.RELEASE_ORDER, {'order': self.entity, 'replan': False}))
+        self.entity.assigned_courier = None
+        self.entity.selected_variant = None

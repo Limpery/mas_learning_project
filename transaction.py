@@ -16,7 +16,8 @@ class PlanningTransaction:
 
     def commit(self):
         for courier, schedule in self.schedules.items():
-            courier.schedule = schedule
+            if schedule != courier.schedule:
+                courier.schedule = schedule
         for order, variant in self.placements.items():
             order.assigned_courier = variant['courier']
             order.selected_variant = variant
